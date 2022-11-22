@@ -1,13 +1,14 @@
+version: '3'
 services:
     redis:
       image: redis/redis-stack-server:${REDIS_TAG}
       # restart: always
       ports:
-        - ${REDIS_PORT}:${REDIS_PORT}
+        - ${REDIS_PORT}:6379
     db:
-      image: mysql
+      image: mysql:${MYSQL_VERSION}
       ports:
-        - ${MYSQL_PORT}:${MYSQL_PORT}
+        - ${MYSQL_PORT}:3306
       command: --default-authentication-plugin=mysql_native_password
       volumes:
         - ./mysql-data:/var/lib/mysql
