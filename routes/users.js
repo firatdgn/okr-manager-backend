@@ -34,11 +34,9 @@ router.get("/", async (req, res, next) => {
             })
             .setIssuer(req.headers.referer)
             .setAudience(req.body.username)
-            .setExpirationTime("1h")
             .setIssuedAt()
+            .setExpirationTime("1d")
             .sign(secret);
-
-        redis.set(`jwt:user:${req.body.username}`, jwt, "EX", 60 * 60);
 
         res.status(200).json({
             status: "success",
