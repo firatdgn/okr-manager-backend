@@ -1,11 +1,10 @@
 const express = require("express");
 const user = require("../models/user");
 const jose = require("jose");
-const redis = require("../core/redis-cli");
 
 const router = express.Router();
 
-router.post("/", async (req, res, next) => {
+router.post("/sign-up", async (req, res, next) => {
     let result;
     try {
         result = await user.create(req.body.username, req.body.password);
@@ -19,7 +18,7 @@ router.post("/", async (req, res, next) => {
         if (error.code === "ER_DUP_ENTRY") {
             res.status(409).json({
                 status: "error",
-                message: "The user name is already created.",
+                message: "The user already exist.",
             });
         } else if (error.code === "ERR_INVALID_ARG_TYPE") {
             res.status(400).json({
@@ -30,7 +29,7 @@ router.post("/", async (req, res, next) => {
     }
 });
 
-router.get("/", async (req, res, next) => {
+router.post("/sign-in", async (req, res, next) => {
     try {
         if (await user.doesExist(req.body.username, req.body.password)) {
             const secret = new TextEncoder().encode(process.env.JWT_SECRET);

@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const db = require("../core/db-connection");
 
 db.query(
@@ -6,5 +8,8 @@ db.query(
 		username varchar(255) NOT NULL UNIQUE,
 		password text NOT NULL
 	)
-`
+`,
+    () => {
+        process.exit();
+    }
 );
