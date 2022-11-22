@@ -1,5 +1,18 @@
 services:
     redis:
-      image: redis/redis-stack-server:6.2.6-rc1
+      image: redis/redis-stack-server:${REDIS_TAG}
+      # restart: always
       ports:
-        - 6379:6379
+        - ${REDIS_PORT}:${REDIS_PORT}
+    db:
+      image: mysql
+      ports:
+        - ${MYSQL_PORT}:${MYSQL_PORT}
+      command: --default-authentication-plugin=mysql_native_password
+      volumes:
+        - ./mysql-data:/var/lib/mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_DATABASE: ${MYSQL_DATABASE}
