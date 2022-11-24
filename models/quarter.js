@@ -7,7 +7,7 @@ module.exports = {
             if (bhagId) {
                 sql = `SELECT id FROM bhags WHERE bhags.user = '${user}' AND bhags.id = ${bhagId} AND bhags.deleted_at IS NULL`;
             } else if (quarterId) {
-                sql = `SELECT id FROM bhags INNER JOIN quarters ON bhags.id = quarters.bhag_id WHERE bhags.user = '${user}' AND quarters.id = ${quarterId} AND (bhags.deleted_at IS NULL OR quarters.deleted_at IS NULL)`;
+                sql = `SELECT quarters.id FROM bhags INNER JOIN quarters ON bhags.id = quarters.bhag_id WHERE bhags.user = '${user}' AND quarters.id = ${quarterId} AND (bhags.deleted_at IS NULL OR quarters.deleted_at IS NULL)`;
             }
             db.query(sql, (err, rows) => {
                 if (err) {
@@ -45,7 +45,7 @@ module.exports = {
     },
     update(startedAt, finishedAt, quarterId, user) {
         return new Promise(async (resolve, reject) => {
-            let isUserAuthorized = await this.isUserAuthorized(
+            let isUserAuthorized = await this.checkUserAuthorization(
                 user,
                 quarterId,
                 null
@@ -71,7 +71,7 @@ module.exports = {
     },
     delete(user, quarterId) {
         return new Promise(async (resolve, reject) => {
-            let isUserAuthorized = await this.isUserAuthorized(
+            let isUserAuthorized = await this.checkUserAuthorization(
                 user,
                 quarterId,
                 null

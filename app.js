@@ -6,7 +6,6 @@ const jose = require("jose");
 const indexRouter = require("./routes/index");
 const userRouter = require("./routes/users");
 const bhagRouter = require("./routes/bhag");
-const quarterRouter = require("./routes/quarters");
 
 const app = express();
 
@@ -35,6 +34,5 @@ app.use(async (req, res, next) => {
 });
 
 app.use("/bhags", bhagRouter);
-app.use("/quarters", quarterRouter);
 
 module.exports = app;

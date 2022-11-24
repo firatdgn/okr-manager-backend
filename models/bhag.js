@@ -1,11 +1,11 @@
 const db = require("../core/db-connection");
 
 module.exports = {
-    create(name, user) {
+    create(content, user) {
         return new Promise((resolve, reject) => {
             db.query(
                 `
-			INSERT INTO bhags(name, user) VALUES ('${name}', '${user}')
+			INSERT INTO bhags(content, user) VALUES ('${content}', '${user}')
 			`,
                 (err, res) => {
                     if (err) {
@@ -18,7 +18,7 @@ module.exports = {
     },
     getAll(filter = null) {
         return new Promise((resolve, reject) => {
-            let sql = ` SELECT id, name FROM bhags WHERE deleted_at IS NULL`;
+            let sql = ` SELECT id, content FROM bhags WHERE deleted_at IS NULL`;
             if (filter) {
                 let whereClause = [];
                 for (key in filter) {
@@ -34,11 +34,11 @@ module.exports = {
             });
         });
     },
-    update(name, user, id) {
+    update(content, user, id) {
         return new Promise((resolve, reject) => {
             db.query(
                 `
-				UPDATE bhags SET name = '${name}' WHERE id=${id} and user = '${user}'
+				UPDATE bhags SET content = '${content}' WHERE id=${id} and user = '${user}'
 			`,
                 (err, res) => {
                     if (err) {

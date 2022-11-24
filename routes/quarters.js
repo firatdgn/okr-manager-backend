@@ -1,7 +1,7 @@
 const express = require("express");
 const quarter = require("../models/quarter");
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.post("/", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
@@ -9,7 +9,7 @@ router.post("/", async (req, res, next) => {
         const result = await quarter.create(
             req.body.startedAt,
             req.body.finishedAt,
-            req.body.bhagId,
+            req.params.bhagId,
             payload.aud
         );
         if (result.affectedRows > 0) {
@@ -30,12 +30,12 @@ router.post("/", async (req, res, next) => {
         });
     }
 });
-router.put("/:id", async (req, res, next) => {
+router.put("/:quarterId", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
     const result = await quarter.update(
         req.body.startedAt,
         req.body.finishedAt,
-        req.params.id,
+        req.params.quarterId,
         payload.aud
     );
     if (result.affectedRows > 0) {
@@ -51,9 +51,9 @@ router.put("/:id", async (req, res, next) => {
     }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:quarterId", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
-    const result = await quarter.delete(payload.aud, req.params.id);
+    const result = await quarter.delete(payload.aud, req.params.quarterId);
     if (result.affectedRows > 0) {
         res.status(200).json({
             status: "success",

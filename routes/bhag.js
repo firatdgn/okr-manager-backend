@@ -1,5 +1,6 @@
 const express = require("express");
 const bhag = require("../models/bhag");
+const quarterRouter = require("./quarters");
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ router.get("/", async (req, res, next) => {
 });
 router.post("/", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
-    const result = await bhag.create(req.body.bhagName, payload.aud);
+    const result = await bhag.create(req.body.bhagContent, payload.aud);
     if (result.affectedRows > 0) {
         res.status(201).json({
             status: "success",
@@ -26,7 +27,7 @@ router.post("/", async (req, res, next) => {
 router.put("/:id", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
     const result = await bhag.update(
-        req.body.bhagName,
+        req.body.bhagContent,
         payload.aud,
         req.params.id
     );
@@ -58,5 +59,7 @@ router.delete("/:id", async (req, res, next) => {
         });
     }
 });
+
+router.use("/:bhagId/quarters", quarterRouter);
 
 module.exports = router;
