@@ -1,71 +1,68 @@
 const express = require("express");
-const objective = require("../models/objective");
-const keyResultRouter = require("./key-results");
+const keyResult = require("../models/key-result");
 
 const router = express.Router({ mergeParams: true });
 
 router.post("/", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
     try {
-        const result = await objective.create(
-            req.body.objectiveContent,
-            req.params.quarterId,
+        const result = await keyResult.create(
+            req.body.keyResultContent,
+            req.params.objectiveId,
             payload.aud
         );
         if (result.affectedRows > 0) {
             res.status(201).json({
                 status: "success",
-                message: "Objective is created",
+                message: "Key result is created",
             });
         } else {
             res.status(400).json({
                 status: "error",
-                message: "Couldn't create the objective",
+                message: "Couldn't create the key result",
             });
         }
     } catch (error) {
         res.status(400).json({
             status: "error",
-            message: "Couldn't create the objective",
+            message: "Couldn't create the key result",
         });
     }
 });
-router.put("/:objectiveId", async (req, res, next) => {
+router.put("/:keyResultId", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
-    const result = await objective.update(
-        req.body.objectiveContent,
-        req.params.objectiveId,
+    const result = await keyResult.update(
+        req.body.keyResultContent,
+        req.params.keyResultId,
         payload.aud
     );
     if (result.affectedRows > 0) {
         res.status(201).json({
             status: "success",
-            message: "Objective is updated",
+            message: "Key result is updated",
         });
     } else {
         res.status(400).json({
             status: "error",
-            message: "Couldn't update the objective",
+            message: "Couldn't update the key result",
         });
     }
 });
 
-router.delete("/:objectiveId", async (req, res, next) => {
+router.delete("/:keyResultId", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
-    const result = await objective.delete(payload.aud, req.params.objectiveId);
+    const result = await keyResult.delete(payload.aud, req.params.keyResultId);
     if (result.affectedRows > 0) {
         res.status(200).json({
             status: "success",
-            message: "Objective is deleted",
+            message: "Key result is deleted",
         });
     } else {
         res.status(400).json({
             status: "error",
-            message: "Couldn't delete the objective",
+            message: "Couldn't delete the key result",
         });
     }
 });
-
-router.use("/:objectiveId/key-results", keyResultRouter);
 
 module.exports = router;
