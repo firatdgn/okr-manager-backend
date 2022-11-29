@@ -9,6 +9,7 @@ router.post("/", async (req, res, next) => {
     try {
         const result = await keyResult.create(
             req.body.keyResultContent,
+            req.body.keyResultRequiredStatus,
             req.params.objectiveId,
             payload.aud
         );
@@ -34,6 +35,7 @@ router.put("/:keyResultId", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
     const result = await keyResult.update(
         req.body.keyResultContent,
+        req.body.keyResultRequiredStatus,
         req.params.keyResultId,
         payload.aud
     );

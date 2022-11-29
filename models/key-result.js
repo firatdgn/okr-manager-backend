@@ -17,7 +17,7 @@ module.exports = {
             });
         });
     },
-    create(content, objectiveId, user) {
+    create(content, requiredStatus, objectiveId, user) {
         return new Promise(async (resolve, reject) => {
             let isUserAuthorized = await this.checkUserAuthorization(
                 user,
@@ -32,7 +32,7 @@ module.exports = {
             }
             db.query(
                 `
-            INSERT INTO key_results(content, objective_id) VALUES ('${content}', '${objectiveId}')
+            INSERT INTO key_results(content, required_status, objective_id) VALUES ('${content}', ${requiredStatus}, '${objectiveId}')
             `,
                 (err, res) => {
                     if (err) {
@@ -43,7 +43,7 @@ module.exports = {
             );
         });
     },
-    update(content, keyResultId, user) {
+    update(content, requiredStatus, keyResultId, user) {
         return new Promise(async (resolve, reject) => {
             let isUserAuthorized = await this.checkUserAuthorization(
                 user,
@@ -58,7 +58,7 @@ module.exports = {
             }
             db.query(
                 `
-				UPDATE key_results SET content = '${content}' WHERE id=${keyResultId}
+				UPDATE key_results SET required_status = '${requiredStatus}', content = '${content}' WHERE id=${keyResultId}
 			`,
                 (err, res) => {
                     if (err) {

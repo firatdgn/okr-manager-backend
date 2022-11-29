@@ -51,6 +51,7 @@ db.query(
 	CREATE TABLE IF NOT EXISTS key_results (
 		id INT(255) UNSIGNED NOT NULL AUTO_INCREMENT,
 		content text NOT NULL,
+		required_status INT(255) UNSIGNED NOT NULL,
 		objective_id INT(255) UNSIGNED NOT NULL,
 		deleted_at TIMESTAMP NULL DEFAULT NULL,
 		PRIMARY KEY (id),
