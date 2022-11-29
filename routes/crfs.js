@@ -1,5 +1,6 @@
 const express = require("express");
 const crf = require("../models/crf");
+const dbEvents = require("../events/db-events");
 
 const router = express.Router({ mergeParams: true });
 
@@ -12,6 +13,7 @@ router.post("/", async (req, res, next) => {
             payload.aud
         );
         if (result.affectedRows > 0) {
+            dbEvents.emit("okrIsChanged", payload.aud);
             res.status(201).json({
                 status: "success",
                 message: "CRF is created",
@@ -38,6 +40,7 @@ router.put("/:crfId", async (req, res, next) => {
         payload.aud
     );
     if (result.affectedRows > 0) {
+        dbEvents.emit("okrIsChanged", payload.aud);
         res.status(201).json({
             status: "success",
             message: "CRF is updated",
@@ -54,6 +57,7 @@ router.delete("/:crfId", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
     const result = await crf.delete(payload.aud, req.params.crfId);
     if (result.affectedRows > 0) {
+        dbEvents.emit("okrIsChanged", payload.aud);
         res.status(200).json({
             status: "success",
             message: "CRF is deleted",

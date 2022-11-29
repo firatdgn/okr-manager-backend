@@ -1,6 +1,7 @@
 const express = require("express");
 const keyResult = require("../models/key-result");
 const crfRouter = require("./crfs");
+const dbEvents = require("../events/db-events");
 
 const router = express.Router({ mergeParams: true });
 
@@ -14,6 +15,7 @@ router.post("/", async (req, res, next) => {
             payload.aud
         );
         if (result.affectedRows > 0) {
+            dbEvents.emit("okrIsChanged", payload.aud);
             res.status(201).json({
                 status: "success",
                 message: "Key result is created",
@@ -40,6 +42,7 @@ router.put("/:keyResultId", async (req, res, next) => {
         payload.aud
     );
     if (result.affectedRows > 0) {
+        dbEvents.emit("okrIsChanged", payload.aud);
         res.status(201).json({
             status: "success",
             message: "Key result is updated",
@@ -56,6 +59,7 @@ router.delete("/:keyResultId", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
     const result = await keyResult.delete(payload.aud, req.params.keyResultId);
     if (result.affectedRows > 0) {
+        dbEvents.emit("okrIsChanged", payload.aud);
         res.status(200).json({
             status: "success",
             message: "Key result is deleted",
