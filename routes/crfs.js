@@ -1,71 +1,69 @@
 const express = require("express");
-const keyResult = require("../models/key-result");
-const crfRouter = require("./crfs");
+const crf = require("../models/crf");
 
 const router = express.Router({ mergeParams: true });
 
 router.post("/", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
     try {
-        const result = await keyResult.create(
-            req.body.keyResultContent,
-            req.params.objectiveId,
+        const result = await crf.create(
+            req.body.crfDate,
+            req.params.keyResultId,
             payload.aud
         );
         if (result.affectedRows > 0) {
             res.status(201).json({
                 status: "success",
-                message: "Key result is created",
+                message: "CRF is created",
             });
         } else {
             res.status(400).json({
                 status: "error",
-                message: "Couldn't create the key result",
+                message: "Couldn't create the CRF",
             });
         }
     } catch (error) {
         res.status(400).json({
             status: "error",
-            message: "Couldn't create the key result",
+            message: "Couldn't create the CRF",
         });
     }
 });
-router.put("/:keyResultId", async (req, res, next) => {
+router.put("/:crfId", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
-    const result = await keyResult.update(
-        req.body.keyResultContent,
-        req.params.keyResultId,
+    const result = await crf.update(
+        req.body.crfDate,
+        req.body.crfStatus,
+        req.params.crfId,
         payload.aud
     );
     if (result.affectedRows > 0) {
         res.status(201).json({
             status: "success",
-            message: "Key result is updated",
+            message: "CRF is updated",
         });
     } else {
         res.status(400).json({
             status: "error",
-            message: "Couldn't update the key result",
+            message: "Couldn't update the CRF",
         });
     }
 });
 
-router.delete("/:keyResultId", async (req, res, next) => {
+router.delete("/:crfId", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
-    const result = await keyResult.delete(payload.aud, req.params.keyResultId);
+    const result = await crf.delete(payload.aud, req.params.crfId);
     if (result.affectedRows > 0) {
         res.status(200).json({
             status: "success",
-            message: "Key result is deleted",
+            message: "CRF is deleted",
         });
     } else {
         res.status(400).json({
             status: "error",
-            message: "Couldn't delete the key result",
+            message: "Couldn't delete the CRF",
         });
     }
 });
-
-router.use("/:keyResultId/crfs", crfRouter);
 
 module.exports = router;
