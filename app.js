@@ -33,7 +33,6 @@ app.use(async (req, res, next) => {
     }
 });
 
-//TODO: cache the data in redis
 //TODO: generate jwt secret key and store in redis daily
 app.use("/bhags", bhagRouter);
 
