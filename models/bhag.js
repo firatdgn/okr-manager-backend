@@ -23,14 +23,14 @@ module.exports = {
                 if (err) {
                     reject(err);
                 }
-                let okr = {};
-                for (row of res) {
+                let okrs = {};
+                for (const row of res) {
                     let quarters;
                     let objectives;
                     let keyResults;
                     let crfs;
-                    quarters = okr[row.bhagId]?.["quarters"] ?? {};
-                    okr[row.bhagId] = {
+                    quarters = okrs[row.bhagId]?.["quarters"] ?? {};
+                    okrs[row.bhagId] = {
                         id: row.bhagId,
                         content: row.bhagContent,
                         quarters: quarters,
@@ -74,8 +74,25 @@ module.exports = {
                         currentStatus: row.crfCurrentStatus,
                     };
                 }
+                okrs = Object.values(okrs);
+                for (const okr of okrs) {
+                    okr.quarters = Object.values(okr.quarters);
+                    let quarterIndex = 1;
+                    for (const quarter of okr.quarters) {
+                        quarter.quarter = `Q${quarterIndex++}`;
+                        quarter.objectives = Object.values(quarter.objectives);
+                        for (const objective of quarter.objectives) {
+                            objective.keyResults = Object.values(
+                                objective.keyResults
+                            );
+                            for (const keyResult of objective.keyResults) {
+                                keyResult.crfs = Object.values(keyResult.crfs);
+                            }
+                        }
+                    }
+                }
 
-                resolve(okr);
+                resolve(okrs);
             });
         });
     },
