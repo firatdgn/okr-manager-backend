@@ -2,6 +2,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const jose = require("jose");
+const cors = require("cors");
 
 const indexRouter = require("./routes/index");
 const userRouter = require("./routes/users");
@@ -12,7 +13,11 @@ const app = express();
 app.use(logger("dev"));
 app.use(express.json());
 app.use(cookieParser());
-
+app.use(
+    cors({
+        origin: "*",
+    })
+);
 app.use("/", indexRouter);
 app.use("/users", userRouter);
 
