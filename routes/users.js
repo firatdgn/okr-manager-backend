@@ -50,7 +50,7 @@ router.post("/sign-in", async (req, res, next) => {
         } else {
             res.status(404).json({
                 status: "error",
-                message: "User does not exist",
+                message: "User does not match any record",
             });
         }
     } catch (error) {
