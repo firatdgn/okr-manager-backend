@@ -15,10 +15,11 @@ router.post("/", async (req, res, next) => {
             payload.aud
         );
         if (result.affectedRows > 0) {
-            dbEvents.emit("okrIsChanged", payload.aud);
-            res.status(201).json({
-                status: "success",
-                message: "Quarter is created",
+            dbEvents.emit("okrIsChanged", payload.aud, () => {
+                res.status(201).json({
+                    status: "success",
+                    message: "Quarter is created",
+                });
             });
         } else {
             res.status(400).json({
@@ -42,10 +43,11 @@ router.put("/:quarterId", async (req, res, next) => {
         payload.aud
     );
     if (result.affectedRows > 0) {
-        dbEvents.emit("okrIsChanged", payload.aud);
-        res.status(201).json({
-            status: "success",
-            message: "Quarter is updated",
+        dbEvents.emit("okrIsChanged", payload.aud, () => {
+            res.status(201).json({
+                status: "success",
+                message: "Quarter is updated",
+            });
         });
     } else {
         res.status(400).json({
@@ -59,10 +61,11 @@ router.delete("/:quarterId", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
     const result = await quarter.delete(payload.aud, req.params.quarterId);
     if (result.affectedRows > 0) {
-        dbEvents.emit("okrIsChanged", payload.aud);
-        res.status(200).json({
-            status: "success",
-            message: "Quarter is deleted",
+        dbEvents.emit("okrIsChanged", payload.aud, () => {
+            res.status(200).json({
+                status: "success",
+                message: "Quarter is deleted",
+            });
         });
     } else {
         res.status(400).json({

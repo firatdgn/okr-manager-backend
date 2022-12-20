@@ -28,10 +28,11 @@ router.post("/", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
     const result = await bhag.create(req.body.bhagContent, payload.aud);
     if (result.affectedRows > 0) {
-        dbEvents.emit("okrIsChanged", payload.aud);
-        res.status(201).json({
-            status: "success",
-            message: "BHAG is created",
+        dbEvents.emit("okrIsChanged", payload.aud, () => {
+            res.status(201).json({
+                status: "success",
+                message: "BHAG is created",
+            });
         });
     } else {
         res.status(400).json({
@@ -48,10 +49,11 @@ router.put("/:id", async (req, res, next) => {
         req.params.id
     );
     if (result.affectedRows > 0) {
-        dbEvents.emit("okrIsChanged", payload.aud);
-        res.status(201).json({
-            status: "success",
-            message: "BHAG is updated",
+        dbEvents.emit("okrIsChanged", payload.aud, () => {
+            res.status(201).json({
+                status: "success",
+                message: "BHAG is updated",
+            });
         });
     } else {
         res.status(400).json({
@@ -65,10 +67,11 @@ router.delete("/:id", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
     const result = await bhag.delete(payload.aud, req.params.id);
     if (result.affectedRows > 0) {
-        dbEvents.emit("okrIsChanged", payload.aud);
-        res.status(200).json({
-            status: "success",
-            message: "BHAG is deleted",
+        dbEvents.emit("okrIsChanged", payload.aud, () => {
+            res.status(200).json({
+                status: "success",
+                message: "BHAG is deleted",
+            });
         });
     } else {
         res.status(400).json({

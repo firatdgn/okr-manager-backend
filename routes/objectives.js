@@ -14,10 +14,11 @@ router.post("/", async (req, res, next) => {
             payload.aud
         );
         if (result.affectedRows > 0) {
-            dbEvents.emit("okrIsChanged", payload.aud);
-            res.status(201).json({
-                status: "success",
-                message: "Objective is created",
+            dbEvents.emit("okrIsChanged", payload.aud, () => {
+                res.status(201).json({
+                    status: "success",
+                    message: "Objective is created",
+                });
             });
         } else {
             res.status(400).json({
@@ -40,10 +41,11 @@ router.put("/:objectiveId", async (req, res, next) => {
         payload.aud
     );
     if (result.affectedRows > 0) {
-        dbEvents.emit("okrIsChanged", payload.aud);
-        res.status(201).json({
-            status: "success",
-            message: "Objective is updated",
+        dbEvents.emit("okrIsChanged", payload.aud, () => {
+            res.status(201).json({
+                status: "success",
+                message: "Objective is updated",
+            });
         });
     } else {
         res.status(400).json({
@@ -57,10 +59,11 @@ router.delete("/:objectiveId", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
     const result = await objective.delete(payload.aud, req.params.objectiveId);
     if (result.affectedRows > 0) {
-        dbEvents.emit("okrIsChanged", payload.aud);
-        res.status(200).json({
-            status: "success",
-            message: "Objective is deleted",
+        dbEvents.emit("okrIsChanged", payload.aud, () => {
+            res.status(200).json({
+                status: "success",
+                message: "Objective is deleted",
+            });
         });
     } else {
         res.status(400).json({
