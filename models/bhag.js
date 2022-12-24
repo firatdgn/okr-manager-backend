@@ -40,6 +40,7 @@ module.exports = {
                     }
                     objectives = quarters[row.quarterId]?.["objectives"] ?? {};
                     quarters[row.quarterId] = {
+                        id: row.quarterId,
                         quarter: "Q",
                         startDate: row.quarterStartedAt,
                         finishDate: row.quarterFinishedAt,
