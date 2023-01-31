@@ -35,6 +35,13 @@ router.post("/", async (req, res, next) => {
     }
 });
 router.put("/:keyResultId", async (req, res, next) => {
+    if (!Number.isInteger(req.body.keyResultRequiredStatus)) {
+        res.status(400).json({
+            status: "error",
+            message: "Finished at must be numeric.",
+        });
+        return;
+    }
     const payload = res.locals.jwtPayload;
     const result = await keyResult.update(
         req.body.keyResultContent,
