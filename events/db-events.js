@@ -11,4 +11,8 @@ eventEmitter.on("okrIsChanged", async (user, callback = () => {}) => {
     });
 });
 
+eventEmitter.on("error", (e) =>
+    console.log("Event emitting error caught:", e.message)
+);
+
 module.exports = eventEmitter;

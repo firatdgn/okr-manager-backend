@@ -17,7 +17,7 @@ module.exports = {
             });
         });
     },
-    create(date, keyResultId, user) {
+    create(date, currentStatus, keyResultId, user) {
         return new Promise(async (resolve, reject) => {
             let isUserAuthorized = await this.checkUserAuthorization(
                 user,
@@ -32,7 +32,7 @@ module.exports = {
             }
             db.query(
                 `
-            INSERT INTO crfs(date, current_status, key_result_id) VALUES ('${date}', 0, '${keyResultId}')
+            INSERT INTO crfs(date, current_status, key_result_id) VALUES ('${date}', ${currentStatus}, '${keyResultId}')
             `,
                 (err, res) => {
                     if (err) {

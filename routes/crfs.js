@@ -9,6 +9,7 @@ router.post("/", async (req, res, next) => {
     try {
         const result = await crf.create(
             req.body.crfDate,
+            req.body.currentStatus,
             req.params.keyResultId,
             payload.aud
         );
@@ -36,7 +37,7 @@ router.put("/:crfId", async (req, res, next) => {
     const payload = res.locals.jwtPayload;
     const result = await crf.update(
         req.body.crfDate,
-        req.body.crfStatus,
+        req.body.currentStatus,
         req.params.crfId,
         payload.aud
     );
