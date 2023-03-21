@@ -1,19 +1,35 @@
 version: '3'
 services:
-    redis:
-      image: redis/redis-stack-server:${REDIS_TAG}
-      # restart: always
-      ports:
-        - ${REDIS_PORT}:6379
-    db:
-      image: mysql:${MYSQL_VERSION}
-      ports:
-        - ${MYSQL_PORT}:3306
-      command: --default-authentication-plugin=mysql_native_password
-      volumes:
-        - ./mysql-data:/var/lib/mysql
-      environment:
-        MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
-        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-        MYSQL_USER: ${MYSQL_USER}
-        MYSQL_DATABASE: ${MYSQL_DATABASE}
+  redis:
+    image: redis/redis-stack-server:${REDIS_TAG}
+    container_name: redis
+    restart: always
+    networks:
+     - backend
+  db:
+    image: mysql:${MYSQL_VERSION}
+    container_name: db
+    restart: always
+    networks:
+     - backend
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+  api:
+    build: .
+    restart: always
+    networks:
+     - backend
+     - frontend
+    container_name: api
+
+networks:
+  frontend:
+    name: frontend
+  backend:
+    name: backend
